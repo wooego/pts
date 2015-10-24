@@ -1,3 +1,5 @@
 #untracked files:
 *.pyc
 .idea/
+static/
+accounts/migrations/

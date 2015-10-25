@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+{% load bootstrap3 %}
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    {% bootstrap_css %}
+    <title>首页</title>
+</head>
+<body>
+{% if user.is_authenticated %}
+    <ul>
+        {% for question in questions %}
+            {# Eeach 'question' is a Question model objext #}
+            <li>{{ question.id }}.{{ question }}
+                <span><label><input type="checkbox" id="question{{question.id}}"
+                              value="masterd"/>掌握
+                </label></span>
+            </li>
+            <ul>
+                {% for answers in answers_list %}
+                    {% for answer in answers %}
+                        {% ifequal answer.question_id question.id %}
+                            <li>
+                                <label><input type="radio" name="{{ question.id }}"
+                                              value="{{ answer.option }}"/>{{ answer.option }}:{{ answer.content }}
+                                </label>
+                            </li>
+                        {% endifequal %}
+                    {% endfor %}
+                {% endfor %}
+            </ul>
+        {% endfor %}
+    </ul>
+
+    <div class="pagination">
+    <span class="step-links">
+        {% if questions.has_previous %}
+            <a href="?page={{ questions.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ questions.number }} of {{ questions.paginator.num_pages }}.
+        </span>
+
+        {% if questions.has_next %}
+            <a href="?page={{ questions.next_page_number }}">next</a>
+        {% endif %}
+    </span>
+    </div>
+
+
+
+    <a href={% url 'logout' %}>退出</a>
+{% else %}
+    <p>请登录 <a href={% url 'login' %}>退出</a></p>
+{% endif %}
+<br>
+<script src="{% static 'jquery.js' %}"></script>
+{% bootstrap_javascript %}
+</body>
+</html>

@@ -22,4 +22,6 @@ urlpatterns = [
     url(r'^accounts/login/$','accounts.views.login',name='login'),
     url(r'^accounts/logout/$', 'accounts.views.logout',name="logout"),
     url(r'^accounts/changepwd','accounts.views.changepwd',name='changepwd'),
+
+    url(r'^question','practice.views.question',name='question'),
 ]

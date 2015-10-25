@@ -1,5 +1,6 @@
 from django.contrib import admin
-from .models import UserProfile, Question, Answer, MasterStatus
+from .models import UserProfile
+from practice.models import Question, Answer, MasterStatus
 
 # Register your models here.
 class UserProfileAdmin(admin.ModelAdmin):

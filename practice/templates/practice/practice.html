@@ -5,6 +5,7 @@
 <head lang="en">
     <meta charset="UTF-8">
     {% bootstrap_css %}
+    <link href="{% static 'css/pts.css' %}" rel="stylesheet">
     <title>首页</title>
 </head>
 <body>
@@ -21,13 +22,16 @@
                 {% for answers in answers_list %}
                     {% for answer in answers %}
                         {% ifequal answer.question_id question.id %}
+                            <div id = '{{ question.id }}{{ answer.option }}' >
                             <li>
                                 <label><input type="radio" name="{{ question.id }}"
-                                              value="{{ answer.option }}"/>{{ answer.option }}:{{ answer.content }}
+                                              value="{{ answer.option }}" onclick="radioclick({{ question.id }},'{{ answer.option }}')"/>{{ answer.option }}:{{ answer.content }}
                                 </label>
                             </li>
+                            </div>
                         {% endifequal %}
                     {% endfor %}
+                    <input type="hidden" id="ans{{ question.id }}" value="{{ question.rightOption }}"/>
                 {% endfor %}
             </ul>
         {% endfor %}
@@ -56,7 +60,8 @@
     <p>请登录 <a href={% url 'login' %}>退出</a></p>
 {% endif %}
 <br>
-<script src="{% static 'jquery.js' %}"></script>
+<script src="{% static 'js/jquery.js' %}"></script>
+<script src="{% static 'js/pts.js' %}"></script>
 {% bootstrap_javascript %}
 </body>
 </html>

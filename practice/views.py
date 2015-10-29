@@ -4,12 +4,15 @@ from django.template.context import RequestContext
 from .models import Question, Answer, MasterStatus
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
+each_page = 1 #
 
 def question(request):
     specialty = request.user.profile.specialty
     position = request.user.profile.position
-    each_page = 1
-
+    global each_page
+    http_each_page = request.POST.get('each_page',1)#每次都重新取值，该值会丢失！！！！！！！,使用全局变量解决
+    if http_each_page != 1 and  http_each_page != each_page:
+        each_page = http_each_page
     questions_list = Question.objects.all()#filter(specialty = Question.JUNXIE).filter( position = Question.FDZ)
     answers_list = []
 

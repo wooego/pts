@@ -9,15 +9,19 @@
 </head>
 <body>
 {% if user.is_authenticated %}
-    成功登录</br>
-    <!--Welcome {{ user.username }},you are : {{ request.user.profile.specialty}}-->
-    <a href={% url 'question' %}> <input type="button" value="开始练习" class="btn btn-info"></a>
-    <a href={% url 'logout' %}>退出</a>
+    成功登录
+    <form action="{% url 'question' %}" method="post">
+        {% csrf_token %}
+        请输入每页显示的题目数量：<input type="text" name="each_page" value="1"/>
+        </br>
+        <input type="submit" value="开始练习" class="btn btn-info">
+        <a href={% url 'logout' %}>退出</a>
+    </form>
 {% else %}
     <p>请登录 <a href={% url 'login' %}>退出</a></p>
 {% endif %}
 <br>
-<script src="{% static 'jquery.js' %}"></script>
+<script src="{% static 'js/jquery.js' %}"></script>
 {% bootstrap_javascript %}
 </body>
 </html>

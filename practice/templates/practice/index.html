@@ -15,10 +15,10 @@
         请输入每页显示的题目数量：<input type="text" name="each_page" value="1"/>
         </br>
         <input type="submit" value="开始练习" class="btn btn-info">
-        <a href={% url 'logout' %}>退出</a>
+        <a href="{% url 'logout' %}">退出</a>
     </form>
 {% else %}
-    <p>请登录 <a href={% url 'login' %}>退出</a></p>
+    <p>请登录 <a href="{% url 'login' %}">退出</a></p>
 {% endif %}
 <br>
 <script src="{% static 'js/jquery.js' %}"></script>

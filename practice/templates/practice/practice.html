@@ -14,8 +14,7 @@
         {% for question in questions %}
             {# Eeach 'question' is a Question model objext #}
             <li>{{ question.id }}.{{ question }}
-                <span><label><input type="checkbox" id="question{{question.id}}"
-                              value="masterd"/>掌握
+                <span><label><input type="checkbox" id="question{{question.id}}" onclick="cbmasterclick({{ question.id }})"/>掌握
                 </label></span>
             </li>
             <ul>

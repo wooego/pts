@@ -1,6 +1,6 @@
 #untracked files:
 *.pyc
 .idea/
-static/
+static/js/jquery.js
 accounts/migrations/
 practice/migrations/

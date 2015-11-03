@@ -57,7 +57,7 @@ class Answer(models.Model):
         ordering = ['question','option']
 
 class MasterStatus(models.Model):
-    user = models.OneToOneField(User)
+    user = models.ForeignKey(User)
     question = models.OneToOneField(Question)
     is_master = models.BooleanField(default=False)
 

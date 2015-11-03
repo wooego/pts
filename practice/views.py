@@ -3,6 +3,9 @@ from django.shortcuts import render_to_response
 from django.template.context import RequestContext
 from .models import Question, Answer, MasterStatus
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from django.contrib.auth.models import User
+from django.http.response import HttpResponse
+from django.core.exceptions import ObjectDoesNotExist
 
 each_page = 1 #
 
@@ -33,3 +36,19 @@ def question(request):
     return render(request, 'practice/practice.html', {"questions": questions, "answers_list": answers_list})
 
 # Create your views here.
+def master(request):
+    qid = request.GET.get('qid')
+    userid = request.GET.get('userid')
+    ismaster = int(request.GET.get('ismaster'))
+
+    user = User.objects.get(pk=userid)
+    question = Question.objects.get(pk=qid)
+    try:
+        m = MasterStatus.objects.get(user=user, question=question)
+    except ObjectDoesNotExist:
+        m = MasterStatus.objects.create(user=user, question=question,is_master=ismaster)
+        m.save()
+    else:
+       MasterStatus.objects.filter(user=user,question=question).update(is_master=ismaster)
+    #m.save()
+    return HttpResponse("Test")

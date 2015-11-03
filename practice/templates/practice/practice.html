@@ -14,7 +14,7 @@
         {% for question in questions %}
             {# Eeach 'question' is a Question model objext #}
             <li>{{ question.id }}.{{ question }}
-                <span><label><input type="checkbox" id="question{{question.id}}" onclick="cbmasterclick({{user.id}},{{ question.id }})"/>掌握
+                <span><label><input type="checkbox" id="question{{question.id}}" qid="{{ question.id }}" userid="{{ user.id }}"/>掌握
                 </label></span>
             </li>
             <ul>
@@ -24,7 +24,7 @@
                             <div id = '{{ question.id }}{{ answer.option }}' >
                             <li>
                                 <label><input type="radio" name="{{ question.id }}"
-                                              value="{{ answer.option }}" onclick="radioclick({{ question.id }},'{{ answer.option }}')"/>{{ answer.option }}:{{ answer.content }}
+                                              value="{{ answer.option }}" />{{ answer.option }}:{{ answer.content }}
                                 </label>
                             </li>
                             </div>

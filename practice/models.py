@@ -1,3 +1,5 @@
+#coding:utf-8
+
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -44,6 +46,8 @@ class Question(models.Model):
     def __str__(self):
         return self.content
 
+    def __unicode__(self):
+        return self.content
 
 class Answer(models.Model):
     question = models.ForeignKey(Question)
@@ -51,6 +55,9 @@ class Answer(models.Model):
     content = models.CharField(max_length=200)  # 答案的内容
 
     def __str__(self):
+        return self.option+":"+self.content
+
+    def __unicode__(self):
         return self.option+":"+self.content
 
     class Meta:

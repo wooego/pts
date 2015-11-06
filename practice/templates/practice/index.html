@@ -12,7 +12,9 @@
     成功登录
     <form action="{% url 'question' %}" method="post">
         {% csrf_token %}
-        请输入每页显示的题目数量：<input type="text" name="each_page" value="1"/>
+        输入每页显示的题量：<input type="text" name="each_page" value="1"/>
+        <br>
+        显示已经掌握的题目？<input type="checkbox"  name="display_master" checked/>
         </br>
         <input type="submit" value="开始练习" class="btn btn-info">
         <a href="{% url 'logout' %}">退出</a>

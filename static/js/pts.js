@@ -24,16 +24,34 @@ $(document).ready(function () {
         var userid = $(event.target).attr("userid"); // user id
         var ck = $(this).is(':checked');
         if (ck) {//掌握框被选中
-            $.get("/master/", {'qid': qid, 'userid': userid,'ismaster':1}, function (data,textStatus) {
+            $.get("/master/", {'qid': qid, 'userid': userid, 'ismaster': 1}, function (data, textStatus) {
                 //$('#'+id).(ret)
                 //alert(data);
             })
         } else {
-            $.get("/master/", {'qid': qid, 'userid': userid,'ismaster':0}, function (data,textStatus) {
+            $.get("/master/", {'qid': qid, 'userid': userid, 'ismaster': 0}, function (data, textStatus) {
                 //$('#'+id).(ret)
                 //alert(data);
             })
         }
+    });
+
+    //键盘操作
+    $(document).keydown(function (event) {
+        //alert(window.location.href)
+        alert(window.location.search)
+        switch (event.keyCode) {
+            case 37:
+            case 81:
+                //alert('前一个');
+                break;
+            case 39:
+            case 88:
+                //alert('后一个');
+                break;
+        }
+        ;
+        return false;
     });
 
 });

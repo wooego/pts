@@ -1,4 +1,4 @@
-#coding:utf-8
+# coding:utf-8
 
 from django.shortcuts import render
 from django.shortcuts import render_to_response
@@ -9,19 +9,40 @@ from django.contrib.auth.models import User
 from django.http.response import HttpResponse
 from django.core.exceptions import ObjectDoesNotExist
 
-each_page = 1 #
 
 def question(request):
     specialty = request.user.profile.specialty
     position = request.user.profile.position
-    global each_page
-    http_each_page = request.POST.get('each_page',1)#每次都重新取值，该值会丢失！！！！！！！,使用全局变量解决
-    if http_each_page != 1 and  http_each_page != each_page:
-        each_page = http_each_page
-    questions_list = Question.objects.all()#filter(specialty = Question.JUNXIE).filter( position = Question.FDZ)
+    if request.session.get('dmq', None) is None: # dmq -> display mastered question
+        if 'display_master' in request.POST:  # 不显示已经掌握的问题
+            request.session['dmq'] = False
+        else:
+            request.session['dmq'] = True
+    if request.session.get('each_page', None) is None:
+        request.session['each_page'] = request.POST.get('each_page', 1)  # 每次都重新取值，该值会丢失！！！！！！！,使用全局变量解决
+    """
+    cur = connection.cursor()
+    cur.execute("
+    select * from practice_question q, practice_masterstatus m where q.id = m.question_id and is_master = 1
+    ")
+    questions_list = cur.fetchall()
+    """
+    if request.session.get('dmq'):
+        query = 'select q.* from practice_question q, practice_masterstatus m where m.user_id = ' + str(
+            request.user.id) + \
+                ' and q.id = m.question_id and q.specialty ="' + str(specialty) + \
+                '" and q.position ="' + str(position) + '" and is_master = 0 order by q.id'
+    else:
+        query = 'select q.* from practice_question q, practice_masterstatus m where m.user_id = ' + str(
+            request.user.id) + ' and q.id = m.question_id order by q.id'
+
+    #print '--------------\n' + query + '\n--------------------\n'
+    questions_list = Question.objects.raw(query)
+    # questions_list = Question.objects.all()#filter(specialty = Question.JUNXIE).filter( position = Question.FDZ)
+    # select * from practice_question q, practice_masterstatus m where q.id = m.question_id and is_master = 0
     answers_list = []
 
-    paginator = Paginator(questions_list, each_page)
+    paginator = Paginator(list(questions_list), request.session.get('each_page'))  # 如果不加上list转化，会报RawQuerySet没有len()函数
 
     page = request.GET.get('page')
     try:
@@ -34,8 +55,9 @@ def question(request):
         answers = Answer.objects.filter(question_id=question.id)  # .order_by('option')
         answers_list.append(answers)
     # print(questions)
-    #print(answers_list)
+    # print(answers_list)
     return render(request, 'practice/practice.html', {"questions": questions, "answers_list": answers_list})
+
 
 # Create your views here.
 def master(request):
@@ -48,9 +70,9 @@ def master(request):
     try:
         m = MasterStatus.objects.get(user=user, question=question)
     except ObjectDoesNotExist:
-        m = MasterStatus.objects.create(user=user, question=question,is_master=ismaster)
+        m = MasterStatus.objects.create(user=user, question=question, is_master=ismaster)
         m.save()
     else:
-       MasterStatus.objects.filter(user=user,question=question).update(is_master=ismaster)
-    #m.save()
+        MasterStatus.objects.filter(user=user, question=question).update(is_master=ismaster)
+    # m.save()
     return HttpResponse("Test")

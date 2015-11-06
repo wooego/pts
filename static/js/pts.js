@@ -1,18 +1,7 @@
 /**
  * Created by fp862 on 2015/10/28.
- *
- function radioclick(id, opt) {
-            var ans_id = 'ans' + id;
-            var ans = $('#' + ans_id).val()
-            var id = '' + id + opt;
-            if (opt == ans) {
-                document.getElementById(id).style.color = "green";
-            } else {
-                document.getElementById(id).style.color = "red";
-                //$(this).css("backgroud-color","red"); 不太会用。。。
-            }
-        }
  */
+
 $(document).ready(function () {
     /* 处理选择答案时的颜色变化*/
     $(':radio').click(function (event) {
@@ -29,7 +18,7 @@ $(document).ready(function () {
     });
     /*处理勾选掌握框*/
 
-    $(':checkbox').click(function (event) {
+    $('.answer').click(function (event) {
         var id = $(event.target).attr('id');
         var qid = $(event.target).attr("qid"); //question id
         var userid = $(event.target).attr("userid"); // user id

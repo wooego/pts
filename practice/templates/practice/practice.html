@@ -14,7 +14,7 @@
         {% for question in questions %}
             {# Eeach 'question' is a Question model objext #}
             <li>{{ question.id }}.{{ question }}
-                <span><label><input type="checkbox" id="question{{ question.id }}" qid="{{ question.id }}"
+                <span><label><input type="checkbox" class="answer" id="question{{ question.id }}" qid="{{ question.id }}"
                                     userid="{{ user.id }}"/>掌握
                 </label></span>
             </li>

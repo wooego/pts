@@ -39,19 +39,35 @@ $(document).ready(function () {
     //键盘操作
     $(document).keydown(function (event) {
         //alert(window.location.href)
-        alert(window.location.search)
-        switch (event.keyCode) {
-            case 37:
-            case 81:
-                //alert('前一个');
-                break;
-            case 39:
-            case 88:
-                //alert('后一个');
-                break;
+        var view = window.location.pathname;
+        if (view == '/question') {
+            var ival = parseInt($.getUrlParam('page'));
+            if (isNaN(ival)){
+                ival = 1;
+            }
+            switch (event.keyCode) {
+                case 37:
+                case 81:
+                    if (ival > 1) {
+                        window.location.href = view + '?page=' + (ival - 1);
+                    }
+                    break;
+                case 39:
+                case 88:
+                    window.location.href = view+'?page='+(ival+1);
+                    break;
+            }
+            return false;
         }
-        ;
-        return false;
     });
-
 });
+
+//获取url中的参数
+(function ($) {
+    $.getUrlParam = function (name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+        var r = window.location.search.substr(1).match(reg);  //匹配目标参数
+        if (r != null) return decodeURI(r[2]);
+        return null; //返回参数值
+    }
+})(jQuery);

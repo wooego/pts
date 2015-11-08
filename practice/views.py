@@ -50,6 +50,7 @@ def question(request):
     paginator = Paginator(list(questions_list), request.session.get('each_page'))  # 如果不加上list转化，会报RawQuerySet没有len()函数
 
     page = request.GET.get('page')
+    status_dict = {}
     try:
         questions = paginator.page(page)
     except PageNotAnInteger:
@@ -59,10 +60,12 @@ def question(request):
     for question in questions:
         answers = Answer.objects.filter(question_id=question.id)  # .order_by('option')
         answers_list.append(answers)
-        masterStatus = MasterStatus.objects.filter(question_id = question.id).filter(user_id = request.user.id)
-    # print(questions)
-    #print "!!!!!!!!"+str(masterStatus[0].is_master)
-    return render(request, 'practice/practice.html', {"questions": questions, "answers_list": answers_list})
+        masterstatus = MasterStatus.objects.filter(question_id = question.id).filter(user_id = request.user.id)
+        if masterstatus.count() != 0:
+            status_dict[question.id]=masterstatus[0].is_master
+        else:
+            status_dict[question.id]=False
+    return render(request, 'practice/practice.html', {"questions": questions,"status_dict":status_dict,"answers_list": answers_list})
 
 
 # Create your views here.

@@ -65,7 +65,12 @@ class Answer(models.Model):
 
 class MasterStatus(models.Model):
     user = models.ForeignKey(User)
-    question = models.OneToOneField(Question)
+    question = models.ForeignKey(Question)
     is_master = models.BooleanField(default=False)
 
+    def __str__(self):
+        return self.user.username+":"+self.question.content+":"+str(self.is_master)
+
+    def __unicode__(self):
+        return self.user.username+":"+self.question.content+":"+str(self.is_master)
 # Create your models here.

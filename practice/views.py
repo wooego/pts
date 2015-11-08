@@ -27,19 +27,24 @@ def question(request):
     ")
     questions_list = cur.fetchall()
     """
-    if request.session.get('dmq'):
-        query = 'select q.* from practice_question q, practice_masterstatus m where m.user_id = ' + str(
-            request.user.id) + \
+    if request.session.get('dmq'): #不显示已经掌握的问题
+        #下面的query只能处理已经存在于practice_masterstatus表中，且is_master字段值为0的情况，不能处理不存在于该表中的数据
+        query = 'select q.* from practice_question q, practice_masterstatus m where m.user_id = ' + str( request.user.id) + \
                 ' and q.id = m.question_id and q.specialty ="' + str(specialty) + \
-                '" and q.position ="' + str(position) + '" and is_master = 0 order by q.id'
-    else:
-        query = 'select q.* from practice_question q, practice_masterstatus m where m.user_id = ' + str(
-            request.user.id) + ' and q.id = m.question_id order by q.id'
+                '" and q.position ="' + str(position) + '" and is_master != 1 order by q.id'
+        #处理数据不在parctice_masterstatus表中的问题
+        query2 = 'select * from practice_question  where id not in (select question_id from practice_masterstatus )'+\
+                ' and  specialty="'+ str(specialty) + '" and position ="'+str(position) +'"'
+    else: #显示所有问题
+        query = 'select * from practice_question where specialty = "' + str(specialty) + \
+        '" and position ="' + str(position) + '" order by id'
+        query2 = None
 
     #print '--------------\n' + query + '\n--------------------\n'
-    questions_list = Question.objects.raw(query)
-    # questions_list = Question.objects.all()#filter(specialty = Question.JUNXIE).filter( position = Question.FDZ)
-    # select * from practice_question q, practice_masterstatus m where q.id = m.question_id and is_master = 0
+    questions_list = Question.objects.raw(query)#此处question_list有可能为空,未处理
+    if query2 is not None:
+        questions_list2 = Question.objects.raw(query2)
+        questions_list = list(questions_list)+ list(questions_list2)
     answers_list = []
 
     paginator = Paginator(list(questions_list), request.session.get('each_page'))  # 如果不加上list转化，会报RawQuerySet没有len()函数
@@ -54,8 +59,9 @@ def question(request):
     for question in questions:
         answers = Answer.objects.filter(question_id=question.id)  # .order_by('option')
         answers_list.append(answers)
+        masterStatus = MasterStatus.objects.filter(question_id = question.id).filter(user_id = request.user.id)
     # print(questions)
-    # print(answers_list)
+    #print "!!!!!!!!"+str(masterStatus[0].is_master)
     return render(request, 'practice/practice.html', {"questions": questions, "answers_list": answers_list})
 
 

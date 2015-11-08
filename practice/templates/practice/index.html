@@ -1,14 +1,15 @@
 <!DOCTYPE html>
 {% load staticfiles %}
 {% load bootstrap3 %}
-<html>
-<head lang="en">
-    <meta charset="UTF-8">
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>配置页</title>
     {% bootstrap_css %}
-    <title>首页</title>
 </head>
 <body>
 {% if user.is_authenticated %}
+    <!--
     成功登录
     <form action="{% url 'question' %}" method="post">
         {% csrf_token %}
@@ -19,10 +20,19 @@
         <input type="submit" value="开始练习" class="btn btn-info">
         <a href="{% url 'logout' %}">退出</a>
     </form>
+    -->
+    <div class="well">
+        <form class="form-horizontal" action="{% url 'question' %}" method="post">
+            {% csrf_token %}
+            {% bootstrap_form form %}
+            <p class="form-actions">
+                <input type="submit" value="开始" class="btn btn-primary">
+            </p>
+        </form>
+    </div>
 {% else %}
-    <p>请登录 <a href="{% url 'login' %}">退出</a></p>
+    <p>请登录 <a href="{% url 'login' %}">登录</a></p>
 {% endif %}
-<br>
 <script src="{% static 'js/jquery.js' %}"></script>
 {% bootstrap_javascript %}
 </body>

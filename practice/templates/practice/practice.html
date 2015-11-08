@@ -14,8 +14,17 @@
         {% for question in questions %}
             {# Eeach 'question' is a Question model objext #}
             <li>{{ question.id }}.{{ question }}
-                <span><label><input type="checkbox" class="answer" id="question{{ question.id }}" qid="{{ question.id }}"
-                                    userid="{{ user.id }}"/>掌握
+                <span><label><input type="checkbox" class="answer" id="question{{ question.id }}"
+                                    qid="{{ question.id }}"
+                                    userid="{{ user.id }}"
+                        {% for k,v in status_dict.iteritems %}
+                            {% ifequal  k   question.id %}
+                                {% if v %}
+                                    checked
+                                {% endif %}
+                            {% endifequal %}
+                        {% endfor %}
+                        />掌握
                 </label></span>
             </li>
             <ul>

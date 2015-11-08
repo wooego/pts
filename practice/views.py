@@ -14,7 +14,7 @@ def question(request):
     specialty = request.user.profile.specialty
     position = request.user.profile.position
     if request.session.get('dmq', None) is None: # dmq -> display mastered question
-        if 'display_master' in request.POST:  # 不显示已经掌握的问题
+        if 'dmp' in request.POST:  # 不显示已经掌握的问题
             request.session['dmq'] = False
         else:
             request.session['dmq'] = True

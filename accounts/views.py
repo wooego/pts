@@ -1,11 +1,12 @@
+#coding:utf-8
 from django.shortcuts import render, render_to_response
 from django.template.context import RequestContext
 from django.contrib import auth
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from .forms import LoginForm, ChangepwdForm
-
+from practice.forms import ConfigureForm
 
 def login(request):
     if request.method == 'GET':
@@ -19,7 +20,8 @@ def login(request):
             user = auth.authenticate(username=username, password=password)
             if user is not None and user.is_active:
                 auth.login(request, user)
-                return render_to_response('practice/index.html', RequestContext(request))
+                cform = ConfigureForm() #这儿的使用应该有问题，影响使用的时候再修改吧
+                return render_to_response('practice/index.html', RequestContext(request,{'form':cform}))
             else:
                 return render_to_response('accounts/login.html',
                                           RequestContext(request, {'form': form, 'password_is_wrong': True}))
@@ -54,3 +56,7 @@ def changepwd(request):
                                           RequestContext(request, {'form': form, 'oldpassword_is_wrong': True}))
         else:
             return render_to_response('accounts/changepwd.html', RequestContext(request, {'form': form, }))
+
+def forgetpwd(request):
+    fstr = u"请联系管理员操作"
+    return HttpResponse(fstr)

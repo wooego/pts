@@ -21,7 +21,7 @@ def login(request):
             if user is not None and user.is_active:
                 auth.login(request, user)
                 cform = ConfigureForm() #这儿的使用应该有问题，影响使用的时候再修改吧
-                return render_to_response('practice/index.html', RequestContext(request,{'form':cform}))
+                return render_to_response('accounts/index.html', RequestContext(request,{'form':cform}))
             else:
                 return render_to_response('accounts/login.html',
                                           RequestContext(request, {'form': form, 'password_is_wrong': True}))
@@ -50,7 +50,7 @@ def changepwd(request):
                 newpassword = request.POST.get('newpassword1', '')
                 user.set_password(newpassword)
                 user.save()
-                return render_to_response('practice/index.html', RequestContext(request, {'changepwd_success': True}))
+                return render_to_response('accounts/index.html', RequestContext(request, {'changepwd_success': True}))
             else:
                 return render_to_response('accounts/changepwd.html',
                                           RequestContext(request, {'form': form, 'oldpassword_is_wrong': True}))

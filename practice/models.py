@@ -3,6 +3,13 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+
+'''
+class RandomManager(models.Manager):
+    def get_queryset(self):
+        return super(RandomManager, self).get_queryset().order_by('?')
+'''
+
 class Question(models.Model):
     Regulations = 'RL'
     HighTech = 'HT'
@@ -33,7 +40,7 @@ class Question(models.Model):
         (YUAN, '员'),
     )
 
-    content = models.CharField(max_length=300)  # 题目内容
+    content = models.CharField(max_length=300,verbose_name=u'题目内容')  # 题目内容
     rightOption = models.CharField(max_length=4)  # 最多有四个正确选项
     specialty = models.CharField(max_length=2,
                                  choices=SPECIALTY_CHOICES, )
@@ -42,6 +49,8 @@ class Question(models.Model):
     type = models.CharField(max_length=2,
                             choices=TYPE_CHOICES, )
     # default=Regulations)
+
+    #randoms = RandomManager()
 
     def __str__(self):
         return self.content

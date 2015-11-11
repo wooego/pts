@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+{% load bootstrap3 %}
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    {% bootstrap_css %}
+    <link href="{% static 'css/pts.css' %}" rel="stylesheet">
+    <title>首页</title>
+</head>
+<body>
+{% if user.is_authenticated %}
+    <ul>
+        {% for question in questions %}
+            {# Eeach 'question' is a Question model objext #}
+            <li>{{ forloop.counter }}.{{ question }}</li>
+            <ul>
+                {% for answers in answers_list %}
+                    {% for answer in answers %}
+                        {% ifequal answer.question_id question.id %}
+                            <div id='{{ question.id }}{{ answer.option }}'>
+                                <li>
+                                    <label><input type="radio" name="{{ question.id }}"
+                                                  value="{{ answer.option }}"/>{{ answer.option }}:{{ answer.content }}
+                                    </label>
+                                </li>
+                            </div>
+                        {% endifequal %}
+                    {% endfor %}
+                {% endfor %}
+                <input type="hidden" id="ans{{ question.id }}" value="{{ question.rightOption }}"/>
+            </ul>
+        {% endfor %}
+    </ul>
+
+    <a href={% url 'logout' %}>退出</a>
+{% else %}
+    <p>请登录 <a href={% url 'login' %}>退出</a></p>
+{% endif %}
+<br>
+<script src="{% static 'js/jquery.js' %}"></script>
+<script src="{% static 'js/pts.js' %}"></script>
+{% bootstrap_javascript %}
+</body>
+</html>

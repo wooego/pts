@@ -26,5 +26,6 @@ urlpatterns = [
 
     url(r'^question','practice.views.question',name='question'),
     url(r'^exam','exam.views.exam',name='exam'),
+    url(r'^result','exam.views.result',name='result'),
     url(r'^master','practice.views.master',name='master'),
 ]

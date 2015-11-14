@@ -10,29 +10,32 @@
 </head>
 <body>
 {% if user.is_authenticated %}
-    <ul>
-        {% for question in questions %}
-            {# Eeach 'question' is a Question model objext #}
-            <li>{{ forloop.counter }}.{{ question }}</li>
-            <ul>
-                {% for answers in answers_list %}
-                    {% for answer in answers %}
-                        {% ifequal answer.question_id question.id %}
-                            <div id='{{ question.id }}{{ answer.option }}'>
-                                <li>
-                                    <label><input type="radio" name="{{ question.id }}"
-                                                  value="{{ answer.option }}"/>{{ answer.option }}:{{ answer.content }}
-                                    </label>
-                                </li>
-                            </div>
-                        {% endifequal %}
+    <form class="form-horizontal" method="post" action="{% url 'result' %}">
+        {% csrf_token %}
+        <ul>
+            {% for question in questions %}
+                {# Eeach 'question' is a Question model objext #}
+                <li>{{ forloop.counter }}.{{ question }}</li>
+                <ul>
+                    {% for answers in answers_list %}
+                        {% for answer in answers %}
+                            {% ifequal answer.question_id question.id %}
+                                <div id='{{ question.id }}{{ answer.option }}'>
+                                    <li>
+                                        <label><input type="radio" name="{{ question.id }}"
+                                                      value="{{ answer.option }}"/>{{ answer.option }}:{{ answer.content }}
+                                        </label>
+                                    </li>
+                                </div>
+                            {% endifequal %}
+                        {% endfor %}
                     {% endfor %}
-                {% endfor %}
-                <input type="hidden" id="ans{{ question.id }}" value="{{ question.rightOption }}"/>
-            </ul>
-        {% endfor %}
-    </ul>
-
+                    <input type="hidden" name="ro{{ question.id }}" value="{{ question.rightOption }}"/>
+                </ul>
+            {% endfor %}
+        </ul>
+        <input type="submit" value="交卷" class="btn btn-info">
+    </form>
     <a href={% url 'logout' %}>退出</a>
 {% else %}
     <p>请 <a href={% url 'login' %}>登录</a></p>

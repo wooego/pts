@@ -4,7 +4,7 @@
 
 $(document).ready(function () {
     /* 处理选择答案时的颜色变化*/
-    $(':radio').click(function (event) {
+    $('.option').click(function (event) {
         var curVal = $(this).val(); // answer option
         var qid = $(event.target).attr('name');  //question_id
         var id = 'ans' + qid;

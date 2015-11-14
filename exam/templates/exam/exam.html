@@ -35,7 +35,7 @@
 
     <a href={% url 'logout' %}>退出</a>
 {% else %}
-    <p>请登录 <a href={% url 'login' %}>退出</a></p>
+    <p>请 <a href={% url 'login' %}>登录</a></p>
 {% endif %}
 <br>
 <script src="{% static 'js/jquery.js' %}"></script>

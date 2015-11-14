@@ -33,7 +33,7 @@
                         {% ifequal answer.question_id question.id %}
                             <div id='{{ question.id }}{{ answer.option }}'>
                                 <li>
-                                    <label><input type="radio" name="{{ question.id }}"
+                                    <label><input type="radio" name="{{ question.id }}" class="option"
                                                   value="{{ answer.option }}"/>{{ answer.option }}:{{ answer.content }}
                                     </label>
                                 </li>

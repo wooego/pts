@@ -10,6 +10,25 @@
 <body>
 {% if user.is_authenticated %}
     <div class="container-fluid">
+        <div>欢迎您，{{ user.username}}
+            ;专业:{% if user.profile.specialty == 'XE'%}
+                    机械
+                {%elif user.profile.specialty == 'JX' %}
+                    军械
+                {%elif user.profile.specialty == 'TS' %}
+                    特设
+                {%elif user.profile.specialty == 'WX' %}
+                    无线电
+                {%endif%}
+            ;职务:{% if user.profile.position == 'FDZ'%}
+                    分队长以上
+                {%elif user.profile.position == 'SHI' %}
+                    师
+                {%elif user.profile.position == 'YUAN' %}
+                    员
+                {%endif%}
+            <a href={% url 'logout' %}>退出</a>
+        </div>
         <div class="row-fluid">
             <div class="col-xs-5">
                 <h3 class="text-center">

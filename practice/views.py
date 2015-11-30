@@ -19,7 +19,11 @@ def question(request):
         else:
             request.session['dmq'] = True
     if request.session.get('each_page', None) is None:
-        request.session['each_page'] = request.POST.get('each_page', 1)  # 每次都重新取值，该值会丢失！！！！！！！,使用全局变量解决
+        request.session['each_page'] = request.POST.get('each_page', 1) 
+    if request.session.get('question_type',None) is None:
+        request.session['question_type'] = request.POST.get('question_type','AL') 
+    if request.session['question_type'] == 'AL':
+        request.session['question_type']='%' #用以匹配所有值
     """
     cur = connection.cursor()
     cur.execute("
@@ -30,14 +34,18 @@ def question(request):
     if request.session.get('dmq'): #不显示已经掌握的问题
         #下面的query只能处理已经存在于practice_masterstatus表中，且is_master字段值为0的情况，不能处理不存在于该表中的数据
         query = 'select q.* from practice_question q, practice_masterstatus m where m.user_id = ' + str( request.user.id) + \
-                ' and q.id = m.question_id and q.specialty ="' + str(specialty) + \
-                '" and q.position ="' + str(position) + '" and is_master != 1 order by q.id'
+                ' and q.id = m.question_id and (q.specialty ="' + str(specialty) + \
+                '" or q.specialty="ALL") and (q.position ="' + str(position) + '" or q.position = "ALL") and\
+                q.type like "'+request.session['question_type']+'" and is_master != 1\
+                order by q.id'
         #处理数据不在parctice_masterstatus表中的问题
         query2 = 'select * from practice_question  where id not in (select question_id from practice_masterstatus )'+\
-                ' and  specialty="'+ str(specialty) + '" and position ="'+str(position) +'"'
+                ' and  (specialty="'+ str(specialty) + '" or specialty="ALL") and (position ="'+str(position) +'" or position="ALL")\
+                and practice_question.type like "'+request.session['question_type']+'"'
     else: #显示所有问题
-        query = 'select * from practice_question where specialty = "' + str(specialty) + \
-        '" and position ="' + str(position) + '" order by id'
+        query = 'select * from practice_question where (specialty = "' + str(specialty) + \
+        '" or specialty="ALL") and (position ="' + str(position) + '" or position="ALL") \
+        and practice_question.type like "'+request.session['question_type']+'" order by id '
         query2 = None
 
     #print '--------------\n' + query + '\n--------------------\n'

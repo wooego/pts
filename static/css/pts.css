@@ -1,3 +1,7 @@
 li{
     list-style : outside none none;
 }
+
+ul{
+    padding-left: 10px;
+}

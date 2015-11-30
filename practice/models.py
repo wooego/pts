@@ -21,15 +21,17 @@ class Question(models.Model):
         (DomainPrimary, '专业基础')
     )
 
-    JUNXIE = 'JX'
-    HANGDIAN = 'HD'
     JIXIE = 'XE'
+    JUNXIE = 'JX'
+    TESHE = 'TS'
+    WUXIANDIAN = 'WX'
     ALL = 'AL'
     SPECIALTY_CHOICES = (
         (ALL, '所有专业'),
-        (JUNXIE, '军械'),
-        (HANGDIAN, '航电'),
         (JIXIE, '机械'),
+        (JUNXIE, '军械'),
+        (TESHE,'特设'),
+        (WUXIANDIAN,'无线电'),
     )
 
     FDZ = 'FDZ'

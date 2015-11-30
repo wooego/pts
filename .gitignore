@@ -5,3 +5,5 @@ static/jquery.js
 accounts/migrations/
 practice/migrations/
 exam/migrations/
+*.sql
+*.sqlite3

@@ -22,7 +22,7 @@
                             {% ifequal answer.question_id question.id %}
                                 <div id='{{ question.id }}{{ answer.option }}'>
                                     <li>
-                                        <label><input type="radio" name="{{ question.id }}"
+                                        <label><input type="radio" name="{{ forloop.parentloop.counter}}"
                                                       value="{{ answer.option }}"/>{{ answer.option }}:{{ answer.content }}
                                         </label>
                                     </li>
@@ -30,7 +30,7 @@
                             {% endifequal %}
                         {% endfor %}
                     {% endfor %}
-                    <input type="hidden" name="ro{{ question.id }}" value="{{ question.rightOption }}"/>
+                    <input type="hidden" name="ro{{ forloop.counter }}" value="{{ question.rightOption }}"/>
                 </ul>
             {% endfor %}
         </ul>

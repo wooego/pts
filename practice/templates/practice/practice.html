@@ -12,8 +12,8 @@
 {% if user.is_authenticated %}
     <ul>
         {% for question in questions %}
-            {# Eeach 'question' is a Question model objext #}
-            <li>{{ question.id }}.{{ question }}
+            {# Each 'question' is a Question model objext #}
+            <li>{{question.id}}.{{question}}
                 <span><label><input type="checkbox" class="answer" id="question{{ question.id }}"
                                     qid="{{ question.id }}"
                                     userid="{{ user.id }}"
@@ -61,10 +61,8 @@
         {% endif %}
     </span>
     </div>
-
-
-
     <a href={% url 'logout' %}>退出</a>
+    <button class="btn btn-info"><a href="">提交掌握信息</a></button>
 {% else %}
     <p>请登录 <a href={% url 'login' %}>退出</a></p>
 {% endif %}

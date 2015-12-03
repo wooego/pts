@@ -11,18 +11,18 @@ def exam(request):
     position = request.user.profile.position
     percents = PaperPartsPercent.objects.all()[0] #
     #domains = Question.objects.filter(specialty=specialty, position=position, type=Question.Domain).order_by('?').all().count()#[percents.domain]
-    domains = Question.objects.filter(Q(specialty=specialty)|Q(specialty='ALL'),\
-                                      Q(position=position)|Q(position='ALL'),\
+    domains = Question.objects.filter(Q(specialty=specialty)|Q(specialty='AL'),\
+                                      Q(position=position)|Q(position='AL'),\
                                       Q(type=Question.Domain))\
                                     .order_by('?').all()[0:percents.domain]
     #regulations = Question.objects.filter(specialty=specialty, position=position, type=Question.Regulations).order_by('?').all().count()#[percents.regulation]
     #domainprimarys= Question.objects.filter(specialty=specialty, position=position, type=Question.DomainPrimary).order_by('?').all().count()#[percents.domainprimary]
-    regulations = Question.objects.filter(Q(specialty=specialty)|Q(specialty='ALL'),\
-                                      Q(position=position)|Q(position='ALL'),\
+    regulations = Question.objects.filter(Q(specialty=specialty)|Q(specialty='AL'),\
+                                      Q(position=position)|Q(position='AL'),\
                                       Q(type=Question.Regulations))\
                                     .order_by('?').all()[0:percents.regulation]
-    domainprimarys = Question.objects.filter(Q(specialty=specialty)|Q(specialty='ALL'),\
-                                      Q(position=position)|Q(position='ALL'),\
+    domainprimarys = Question.objects.filter(Q(specialty=specialty)|Q(specialty='AL'),\
+                                      Q(position=position)|Q(position='AL'),\
                                       Q(type=Question.DomainPrimary))\
                                     .order_by('?').all()[0:percents.domainprimary]
     #print type(domains), type(regulations), type(domainprimarys)

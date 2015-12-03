@@ -10,33 +10,39 @@
 </head>
 <body>
 {% if user.is_authenticated %}
-    <form class="form-horizontal" method="post" action="{% url 'result' %}">
-        {% csrf_token %}
-        <ul>
-            {% for question in questions %}
-                {# Eeach 'question' is a Question model objext #}
-                <li>{{ forloop.counter }}.{{ question }}</li>
-                <ul>
-                    {% for answers in answers_list %}
-                        {% for answer in answers %}
-                            {% ifequal answer.question_id question.id %}
-                                <div id='{{ question.id }}{{ answer.option }}'>
-                                    <li>
-                                        <label><input type="radio" name="{{ forloop.parentloop.counter}}"
-                                                      value="{{ answer.option }}"/>{{ answer.option }}:{{ answer.content }}
-                                        </label>
-                                    </li>
-                                </div>
-                            {% endifequal %}
-                        {% endfor %}
-                    {% endfor %}
-                    <input type="hidden" name="ro{{ forloop.counter }}" value="{{ question.rightOption }}"/>
-                </ul>
-            {% endfor %}
-        </ul>
-        <input type="submit" value="交卷" class="btn btn-info">
-    </form>
-    <a href={% url 'logout' %}>退出</a>
+    <div class="row">
+        <div id="score_area" class="score col-md-6 col-md-offset-3"></div>
+    </div>
+    <div class="row">
+        <div id="question_area" class="col-md-6 col-md-offset-1">
+            {% csrf_token %}
+            <ul>
+                {% for question in questions %}
+                    {# Eeach 'question' is a Question model objext #}
+                    <li index="{{ forloop.counter }}">{{ forloop.counter }}.{{ question }}
+                        <ul>
+                            {% for answers in answers_list %}
+                                {% for answer in answers %}
+                                    {% ifequal answer.question_id question.id %}
+                                        <li>
+                                            <label><input type="radio" name="{{ forloop.parentloop.counter }}"
+                                                          value="{{ answer.option }}"/>{{ answer.option }}:{{ answer.content }}
+                                            </label>
+                                        </li>
+                                    {% endifequal %}
+                                {% endfor %}
+                            {% endfor %}
+                            <input type="hidden" name="ro{{ forloop.counter }}" value="{{ question.rightOption }}"/>
+                        </ul>
+                    </li>
+                {% endfor %}
+            </ul>
+            <input type="button" id="judge" value="判卷" class="btn btn-info">
+            <a href={% url 'logout' %}>
+                <button class="btn btn-danger">退出</button>
+            </a>
+        </div>
+    </div>
 {% else %}
     <p>请 <a href={% url 'login' %}>登录</a></p>
 {% endif %}

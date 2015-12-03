@@ -3,8 +3,43 @@
  */
 
 $(document).ready(function () {
+    /*处理判题*/
+    $('#judge').click(function (event) {
+        var wrongNum = 0;
+        $("li").removeClass("wrong-answer lost-answer"); //先去除所有的附加判断的类
+        $('div#question_area>ul>li').each(function (index, element) { //获取包含每道题的li
+
+            var eachLi = $(element);
+            var ro = eachLi.find('input:hidden'); //注意children函数只会查找直接子元素
+            //alert(ro.val());
+            var doOrNot = false;
+            /*判断是否选择答案 ，选择了的，判断是否正确*/
+            eachLi.find(":radio").each(function (i, e) {
+                var isChecked = $(e).is(":checked");
+                if (isChecked == true) {
+                    doOrNot = true;
+                    if (ro.val() != $(e).val()) {
+                        eachLi.addClass("wrong-answer");
+                        wrongNum += 1;
+                    }
+                }
+            });
+            if (!doOrNot) {
+                //alert(eachLi.attr("index") + " : 未做答");
+                eachLi.addClass("lost-answer");
+                wrongNum += 1;
+            }
+        });
+        $("#score_area").empty();
+        if (wrongNum != 0) {
+            $("#score_area").append(" <b>你错了" + wrongNum + "道题</b>.");
+        } else {
+            $("#score_area").append(" <b>恭喜你！满分！</b>.");
+        }
+    });
+
     /* 处理选择答案时的颜色变化*/
-    $('.option').click(function (event) {
+    $(':radio').click(function (event) {
         var curVal = $(this).val(); // answer option
         var qid = $(event.target).attr('name');  //question_id
         var id = 'ans' + qid;
@@ -42,7 +77,7 @@ $(document).ready(function () {
         var view = window.location.pathname;
         if (view == '/question') {
             var ival = parseInt($.getUrlParam('page'));
-            if (isNaN(ival)){
+            if (isNaN(ival)) {
                 ival = 1;
             }
             switch (event.keyCode) {
@@ -54,7 +89,7 @@ $(document).ready(function () {
                     break;
                 case 39:
                 case 88:
-                    window.location.href = view+'?page='+(ival+1);
+                    window.location.href = view + '?page=' + (ival + 1);
                     break;
             }
             return false;

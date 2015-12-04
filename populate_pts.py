@@ -1,3 +1,4 @@
+#coding:utf-8
 import os
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'pts.settings')
@@ -7,82 +8,61 @@ import django
 django.setup()
 
 from practice.models import Question, Answer
+from accounts.models import UserProfile
+from random import randint
 
 
-def populate():
-    python_cat = add_cat('Python', 128, 64)
+specialties = (
+"AL","XE","TS","WX","JX"
+)
+positions = (
+"AL","FDZ","SHI","YUAN"
+)
+qtype = (
+"RL","DP","DM"
+)
 
-    add_page(cat=python_cat,
-             title="Official Python Tutorial",
-             url="http://docs.python.org/2/tutorial/",
-             views=10)
-    add_page(cat=python_cat,
-             title="How to Think like a Computer Scientist",
-             url="http://www.greenteapress.com/thinkpyhton/",
-             views=8)
-    add_page(cat=python_cat,
-             title="Learn Python in 10 Minutes",
-             url="http://www.korokithakis.net/tutorials/python/",
-             views=6)
+def genRandomRightOption():
+    len = randint(0,3)
+    opt = chr(ord('A')+len)
+    return opt,len
 
-    django_cat = add_cat("Django", 64, 32)
+def genRandomSpecialty():
+    return specialties[randint(0,4)]
 
-    add_page(cat=django_cat,
-             title="Official Django Tutorial",
-             url="http://docs.djangoproject.com/en/1.5/intro/tutorial01/",
-             views=10)
+def genRandomPosition():
+    return positions[randint(0,3)]
 
-    add_page(cat=django_cat,
-             title="Django Rocks",
-             url="http://www.djangorocks.com/",
-             views=20)
+def genRandomQtype():
+    return qtype[randint(0,2)]
+    
+def populate(nums=10):
+    add_userprofile(1,'JX','FDZ')
+    questions = []
+    for i in range(nums):
+        questions.append("问题"+str(i+1)+"?")
+    for i,con in enumerate(questions):
+        opt,index= genRandomRightOption()
+        q=add_question(con,opt,genRandomSpecialty(),genRandomPosition(),genRandomQtype())
+        for j in range(4):
+            if j != index:
+                add_answer(q.id,chr(ord('A')+j),"答案"+str(j+1))
+            else:
+                add_answer(q.id,chr(ord('A')+j),"正确答案"+str(j+1))
 
-    add_page(cat=django_cat,
-             title="How to Tango with Django",
-             url="http://www.tangowithdjango.com/",
-             views=8)
-
-    frame_cat = add_cat("Other FrameWorks", 32, 16)
-
-    add_page(cat=frame_cat,
-             title="Bottle",
-             url="http://bottlepy.org/docs/dev/",
-             views=30)
-
-    add_page(cat=frame_cat,
-             title="Flask",
-             url="http://flask.pocoo.org",
-             views=80)
-
-    add_page(cat=frame_cat,
-             title="web.py",
-             url="http://web.py",
-             views=50)
-
-    add_page(cat=frame_cat,
-             title="test1",
-             url="http://test1.org",
-             views=40)
-
-    add_page(cat=frame_cat,
-             title="test2",
-             url="http://test2.py",
-             views=10)
-    for c in Category.objects.all():
-        for p in Page.objects.filter(category=c):
-            print("-{0}-{1}".format(str(c), str(p)))
+def add_question(con, ro, spec, pos,qtype):
+    q = Question.objects.get_or_create(content=con, rightOption=ro,specialty=spec,position=pos,type=qtype)[0]
+    return q
 
 
-def add_page(cat, title, url, views=0):
-    p = Page.objects.get_or_create(category=cat, title=title, url=url, views=views)[0]
-    return p
+def add_answer(qid,opt,con):
+    a = Answer.objects.get_or_create(question_id=qid, option=opt, content=con)[0]
+    return a
 
-
-def add_cat(name, views, likes):
-    c = Category.objects.get_or_create(name=name, views=views, likes=likes)[0]
-    return c
-
+def add_userprofile(uid,spec,pos):
+    u = UserProfile.objects.get_or_create(specialty=spec,position=pos,user_id=uid)[0]
+    return u
 
 if __name__ == '__main__':
-    print("Starting Rango population scipt ...")
-    populate()
+    print("Starting pts population script ...")
+    populate(1000)

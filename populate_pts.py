@@ -9,6 +9,7 @@ django.setup()
 
 from practice.models import Question, Answer
 from accounts.models import UserProfile
+from exam.models import PaperPartsPercent
 from random import randint
 
 
@@ -62,6 +63,9 @@ def add_answer(qid,opt,con):
 def add_userprofile(uid,spec,pos):
     u = UserProfile.objects.get_or_create(specialty=spec,position=pos,user_id=uid)[0]
     return u
+
+def add_paperpartspercent():
+    ppp = PaperPartsPercent.objects.get_or_create(domain=50,regulation=25,domainprimary=25)
 
 if __name__ == '__main__':
     print("Starting pts population script ...")

@@ -6,3 +6,5 @@ accounts/migrations/
 practice/migrations/
 exam/migrations/
 
+env/
+

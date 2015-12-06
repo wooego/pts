@@ -2,7 +2,7 @@
 from django.core.exceptions import ValidationError
 
 from django.db import models
-
+from django.contrib.auth.models import User
 
 class PaperPartsPercent(models.Model):
     domain = models.IntegerField(verbose_name='专业基础题比例', )
@@ -21,4 +21,15 @@ class PaperPartsPercent(models.Model):
             raise ValidationError('题目比例不正确，请保证其和为100')
 
 
-# Create your models here.
+class ResultRecord(models.Model):
+    user = models.ForeignKey(User)
+    score = models.IntegerField(verbose_name='成绩')
+    time_used = models.DurationField(verbose_name='用时')
+    time_examed = models.DateTimeField(verbose_name="考试时间")
+
+
+    def __str__(self):
+        return self.user.username +":"+self.score+":"+self.time_examed
+
+    def __unicode__(self):
+        return self.user.username +":"+self.score+":"+self.time_examed

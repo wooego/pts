@@ -1,7 +1,7 @@
 from django.contrib import admin
 from .models import UserProfile
 from practice.models import Question, Answer, MasterStatus
-from exam.models import PaperPartsPercent
+from exam.models import PaperPartsPercent, ResultRecord
 
 # Register your models here.
 class UserProfileAdmin(admin.ModelAdmin):
@@ -26,3 +26,7 @@ admin.site.register(MasterStatus, MasterStatusAdmin)
 class PaperPartsPercentAdmin(admin.ModelAdmin):
     exclude = []
 admin.site.register(PaperPartsPercent, PaperPartsPercentAdmin)
+
+class ResultRecordAdmin(admin.ModelAdmin):
+    exclude = []
+admin.site.register(ResultRecord, ResultRecordAdmin)

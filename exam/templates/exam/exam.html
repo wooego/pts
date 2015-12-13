@@ -15,7 +15,7 @@
     </div>
     <div class="row">
         <div id="question_area" class="col-md-6 col-md-offset-1">
-            <input type="button" id="judge" value="判卷" class="btn btn-info">
+            <input type="button" value="判卷" userid={{user.id}} class="btn btn-info judge">
             <a href={% url 'logout' %}>
                 <button class="btn btn-danger">退出</button>
             </a>
@@ -40,7 +40,10 @@
                     </li>
                 {% endfor %}
             </ul>
-            <input type="button" id="judge" value="判卷" class="btn btn-info">
+
+            <input id="start_time" type="hidden" value="{{start_time}}">
+
+            <input type="button" value="判卷" userid={{user.id}} class="btn btn-info judge">
             <a href={% url 'logout' %}>
                 <button class="btn btn-danger">退出</button>
             </a>

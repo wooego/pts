@@ -4,7 +4,7 @@
 
 $(document).ready(function () {
     /*处理判题*/
-    $('#judge').click(function (event) {
+    $('.judge').click(function (event) {
         var wrongNum = 0;
         $("li").removeClass("wrong-answer lost-answer"); //先去除所有的附加判断的类
         $('div#question_area>ul>li').each(function (index, element) { //获取包含每道题的li
@@ -30,16 +30,30 @@ $(document).ready(function () {
                 wrongNum += 1;
             }
         });
+
+        /*显示分数*/
         $("#score_area").empty();
         if (wrongNum != 0) {
             $("#score_area").append(" <b>你错了" + wrongNum + "道题</b>.");
         } else {
             $("#score_area").append(" <b>恭喜你！满分！</b>.");
         }
+
+        /*记录考试情况*/
+        var now = $.getSecondsFrom1970();
+        var start_time = $('#start_time').val();
+        var seconds_used = now - start_time;
+        var userid = $(event.target).attr("userid"); // user id
+
+        $.get("/record/", {'userid': userid, 'score': 100-wrongNum ,'seconds_used': seconds_used}, function (data, textStatus) {
+
+        })
+        /*禁用本按钮*/
+        $('.judge').attr("disabled","disabled");
     });
 
     /* 处理选择答案时的颜色变化*/
-    $(':radio').click(function (event) {
+    $('.option').click(function (event) {
         var curVal = $(this).val(); // answer option
         var qid = $(event.target).attr('name');  //question_id
         var id = 'ans' + qid;
@@ -53,7 +67,7 @@ $(document).ready(function () {
     });
     /*处理勾选掌握框*/
 
-    $('.answer').click(function (event) {
+    $('.master').click(function (event) {
         var id = $(event.target).attr('id');
         var qid = $(event.target).attr("qid"); //question id
         var userid = $(event.target).attr("userid"); // user id
@@ -104,5 +118,12 @@ $(document).ready(function () {
         var r = window.location.search.substr(1).match(reg);  //匹配目标参数
         if (r != null) return decodeURI(r[2]);
         return null; //返回参数值
+    };
+
+    $.getSecondsFrom1970 = function(){
+        today = new Date();
+        var s=today.getTime(); //毫秒数
+        return (s/1000).toFixed();//秒
     }
+
 })(jQuery);

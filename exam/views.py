@@ -1,9 +1,12 @@
 #coding:utf-8
 from django.http import HttpResponse
-from exam.models import PaperPartsPercent
+from exam.models import PaperPartsPercent, ResultRecord
+from django.contrib.auth.models import User
 from practice.models import Question, Answer
 from django.shortcuts import render
 from django.db.models import Q
+from time import time
+from datetime import datetime
 
 
 def exam(request):
@@ -41,7 +44,18 @@ def exam(request):
     #print question
     #print '###############'
     #print answers_list
-    return render(request, 'exam/exam.html', {"questions": questions,"answers_list": answers_list})
+    return render(request, 'exam/exam.html', {"questions": questions,"answers_list": answers_list,"start_time":int(time())})
+
+
+def record(request):
+    userid = request.GET.get('userid')
+    score = int(request.GET.get('score'))
+    seconds_used = int(request.GET.get('seconds_used'))
+    user = User.objects.get(pk=userid)
+
+    rr = ResultRecord.objects.create(user=user, score=score, seconds_used=seconds_used,time_examed=datetime.now())
+    rr.save()
+    return HttpResponse("stored")
 
 
 def result(request):

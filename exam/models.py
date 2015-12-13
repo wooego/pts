@@ -24,7 +24,7 @@ class PaperPartsPercent(models.Model):
 class ResultRecord(models.Model):
     user = models.ForeignKey(User)
     score = models.IntegerField(verbose_name='成绩')
-    time_used = models.DurationField(verbose_name='用时')
+    seconds_used = models.IntegerField(verbose_name='用时秒数')
     time_examed = models.DateTimeField(verbose_name="考试时间")
 
 

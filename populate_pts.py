@@ -39,6 +39,7 @@ def genRandomQtype():
     
 def populate(nums=10):
     add_userprofile(1,'JX','FDZ')
+    add_paperpartspercent()
     questions = []
     for i in range(nums):
         questions.append("问题"+str(i+1)+"?")
@@ -65,7 +66,8 @@ def add_userprofile(uid,spec,pos):
     return u
 
 def add_paperpartspercent():
-    ppp = PaperPartsPercent.objects.get_or_create(domain=50,regulation=25,domainprimary=25)
+    ppp = PaperPartsPercent.objects.get_or_create(domain=50,regulation=25,domainprimary=25)[0]
+    return ppp
 
 if __name__ == '__main__':
     print("Starting pts population script ...")

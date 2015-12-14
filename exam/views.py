@@ -33,9 +33,9 @@ def exam(request):
     domains = list(domains)
     regulations= list(regulations)
     domainprimarys = list(domainprimarys)
-    domains.extend(regulations)
-    domains.extend(domainprimarys)
-    questions = domains
+    domainprimarys.extend(regulations)
+    domainprimarys.extend(domains)
+    questions = domainprimarys
 
     answers_list = []
     for question in questions:

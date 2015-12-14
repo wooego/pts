@@ -50,7 +50,7 @@ def populate(nums=10):
             if j != index:
                 add_answer(q.id,chr(ord('A')+j),"答案"+str(j+1))
             else:
-                add_answer(q.id,chr(ord('A')+j),"正确答案"+str(j+1))
+                add_answer(q.id,chr(ord('A')+j),"答案"+str(j+1)+"正确")
 
 def add_question(con, ro, spec, pos,qtype):
     q = Question.objects.get_or_create(content=con, rightOption=ro,specialty=spec,position=pos,type=qtype)[0]
